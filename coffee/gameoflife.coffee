@@ -7,7 +7,7 @@ class GameOfLife
     @currGen = []
     @nextGen = []
     for i in [0...@sizeX*@sizeY]
-      @currGen[i] = @cell(false, true)
+      @currGen[i] = @cell(false, false)
       @nextGen[i] = @cell(false, false)
 
   tick: ->

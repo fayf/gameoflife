@@ -82,6 +82,21 @@ class Controller
           @gol.tick()
           @draw()
         , 1000/@gps)
+    return
+
+  randomize: ->
+    @gol.set i, Math.random() > 0.7 for c, i in @gol.currGen
+    if !@paused then @toggle()
+    @gol.generation = 0
+    @draw()
+    return
+
+  clear: ->
+    @gol.set i, false for c, i in @gol.currGen
+    if !@paused then @toggle()
+    @gol.generation = 0
+    @draw()
+    return
 
   draw: ->
     @header.html('Generation ' + @gol.generation)
@@ -89,6 +104,7 @@ class Controller
       continue if not c.dirty
       [x, y] = @gol.convert i
       @ui.drawCell x, y, c.alive
+    return
 
 $(document).ready ->
   el = $('#canvas')[0]
@@ -99,11 +115,12 @@ $(document).ready ->
   h = 100
   ui = new UI el, w, h
   gol = new GameOfLife w, h
-  for i in [0...w*h]
-    if Math.random() > 0.7 then gol.currGen[i].alive = true;
 
   controller = new Controller ui, gol, $('#header'), $('#speed'), 50
+  controller.randomize()
 
   $('#toggle').click -> controller.toggle()
+  $('#randomize').click -> controller.randomize()
+  $('#clear').click -> controller.clear()
 
   return
