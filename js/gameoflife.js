@@ -16,7 +16,7 @@ GameOfLife = (function() {
     this.currGen = [];
     this.nextGen = [];
     for (i = _i = 0, _ref = this.sizeX * this.sizeY; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-      this.currGen[i] = this.cell(false, true);
+      this.currGen[i] = this.cell(false, false);
       this.nextGen[i] = this.cell(false, false);
     }
   }

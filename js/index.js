@@ -30,10 +30,12 @@ HTML({
   width: canvasW + 'px',
   height: canvasH + 'px',
   backgroundColor: 'red'
-}), STYLE.on('#toggle', {
-  width: '300px',
+}), STYLE.on('button', {
+  width: '100px',
   height: '40px',
-  margin: '5px 0px'
+  margin: '5px 0px 5px 5px'
+}), STYLE.on('button:first-child', {
+  marginLeft: '0px'
 })), SCRIPT({
   type: 'text/javascript',
   src: 'js/gameoflife.js'
@@ -46,9 +48,13 @@ HTML({
   id: 'header'
 }, 'Generation 0'), CANVAS({
   id: 'canvas'
-}), BUTTON({
+}), DIV({}, BUTTON({
   id: 'toggle'
-}, 'Start/Stop'), BR, LABEL('Generations per second: '), INPUT({
+}, 'Start/Stop'), BUTTON({
+  id: 'randomize'
+}, 'Randomize'), BUTTON({
+  id: 'clear'
+}, 'Clear')), LABEL('Generations per second: '), INPUT({
   type: 'text',
   id: 'speed'
 }))));

@@ -102,7 +102,7 @@ Controller = (function() {
     this.paused = !this.paused;
     if (!this.paused) {
       this.draw();
-      return this.id = setInterval(function() {
+      this.id = setInterval(function() {
         if (_this.paused) {
           clearTimeout(_this.id);
           return;
@@ -113,20 +113,46 @@ Controller = (function() {
     }
   };
 
+  Controller.prototype.randomize = function() {
+    var c, i, _i, _len, _ref;
+    _ref = this.gol.currGen;
+    for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+      c = _ref[i];
+      this.gol.set(i, Math.random() > 0.7);
+    }
+    if (!this.paused) {
+      this.toggle();
+    }
+    this.gol.generation = 0;
+    this.draw();
+  };
+
+  Controller.prototype.clear = function() {
+    var c, i, _i, _len, _ref;
+    _ref = this.gol.currGen;
+    for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+      c = _ref[i];
+      this.gol.set(i, false);
+    }
+    if (!this.paused) {
+      this.toggle();
+    }
+    this.gol.generation = 0;
+    this.draw();
+  };
+
   Controller.prototype.draw = function() {
-    var c, i, x, y, _i, _len, _ref, _ref1, _results;
+    var c, i, x, y, _i, _len, _ref, _ref1;
     this.header.html('Generation ' + this.gol.generation);
     _ref = this.gol.currGen;
-    _results = [];
     for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
       c = _ref[i];
       if (!c.dirty) {
         continue;
       }
       _ref1 = this.gol.convert(i), x = _ref1[0], y = _ref1[1];
-      _results.push(this.ui.drawCell(x, y, c.alive));
+      this.ui.drawCell(x, y, c.alive);
     }
-    return _results;
   };
 
   return Controller;
@@ -134,7 +160,7 @@ Controller = (function() {
 })();
 
 $(document).ready(function() {
-  var controller, el, gol, h, i, ui, w, _i, _ref;
+  var controller, el, gol, h, ui, w;
   el = $('#canvas')[0];
   el.width = 500;
   el.height = 500;
@@ -142,13 +168,15 @@ $(document).ready(function() {
   h = 100;
   ui = new UI(el, w, h);
   gol = new GameOfLife(w, h);
-  for (i = _i = 0, _ref = w * h; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-    if (Math.random() > 0.7) {
-      gol.currGen[i].alive = true;
-    }
-  }
   controller = new Controller(ui, gol, $('#header'), $('#speed'), 50);
+  controller.randomize();
   $('#toggle').click(function() {
     return controller.toggle();
+  });
+  $('#randomize').click(function() {
+    return controller.randomize();
+  });
+  $('#clear').click(function() {
+    return controller.clear();
   });
 });
